@@ -14,7 +14,6 @@ class DataConnector:
         self.config['communication_port'] = port
 
     def process_response(self, response):
-        print('Processing response for ' + response.command.name)
         if not response.is_null():
             self.live_data[response.command.name] = round(response.value.magnitude, 2)
 

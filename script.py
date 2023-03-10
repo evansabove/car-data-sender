@@ -4,7 +4,6 @@ import obd
 from argparse import ArgumentParser
 import queue
 import time
-import json
 import uuid
 import config
 import requests
@@ -14,9 +13,13 @@ live_data = { i.name : None for i in data_points }
 data_log = []
 outbound_queue = queue.Queue() #bound this?
 drive_id = str(uuid.uuid4())
+sequence_number = 0
 
 def take_data_sample():
     while True:
+        sequence_number += 1
+        live_data['SEQUENCE_NUMBER'] = sequence_number
+
         outbound_queue.put(live_data)
         time.sleep(1)
 

@@ -33,9 +33,7 @@ def send_to_azure():
 
         message = { 'DRIVE_ID': drive_id, 'SNAPSHOTS': snapshots }
 
-        print("posting")
-        result = requests.post(config.snapshot_data_url, json=message)
-        print(result)
+        requests.post(config.snapshot_data_url, json=message)
 
         time.sleep(5)
 

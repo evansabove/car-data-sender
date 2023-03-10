@@ -7,10 +7,7 @@ import time
 import json
 import uuid
 import config
-from azure.storage.queue import (
-        QueueClient,
-        TextBase64EncodePolicy
-)
+import requests
 
 data_points = [obd.commands.SPEED, obd.commands.RPM, obd.commands.COOLANT_TEMP, obd.commands.INTAKE_TEMP, obd.commands.FUEL_LEVEL, obd.commands.ENGINE_LOAD]
 live_data = { i.name : None for i in data_points }
@@ -24,15 +21,10 @@ def take_data_sample():
         time.sleep(1)
 
 def send_to_azure():
-    client = QueueClient.from_connection_string(conn_str=config.azure_queue_connection_string, 
-                                                    queue_name=config.azure_queue_name,
-                                                    message_encode_policy = TextBase64EncodePolicy())
-    
     while True:
         snapshots = []
 
         for i in range(20):
-            print(i)
             try:
                 snapshot = outbound_queue.get_nowait()
                 snapshots.append(snapshot)
@@ -41,9 +33,9 @@ def send_to_azure():
 
         message = { 'DRIVE_ID': drive_id, 'SNAPSHOTS': snapshots }
 
-        message_string = json.dumps(message)
-
-        client.send_message(message_string) 
+        print("posting")
+        result = requests.post(config.snapshot_data_url, json=message)
+        print(result)
 
         time.sleep(5)
 

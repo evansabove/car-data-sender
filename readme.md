@@ -39,7 +39,6 @@ Install dependencies
 
 - `sudo apt-get install python3-pip`
 - `python -m pip install obd`
-- `python -m pip install azure-storage-queue`
 - `python -m pip install pexpect`
 
 Create config file

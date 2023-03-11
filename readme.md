@@ -48,8 +48,7 @@ Create config file
 With the following content
 
 ```
-  azure_queue_connection_string = {your connection string}
-  azure_queue_name = {your queue name}
+  snapshot_data_url = 'function_url'
 ```
 
 Use bluetoothctl to get MAC address of OBDII adapter. Keep a note of it.
@@ -67,12 +66,9 @@ where `[XX:XX:XX:XX:XX:XX]` is the MAC address of the OBD adapter.
 ## Script setup
 - `mkdir {your-home-dir}/.config/autostart`
 - `nano {your-home-dir}/.config/autostart/cardata.desktop`
-- Add the following code to the file:
+- Add the following code to the rc.local:
   ```
-  [Desktop Entry]
-  Type=Application
-  Name=CarData
-  Exec=/usr/bin/python3 {your-home-dir}/car-data-sender/script.py --log=False --port=/dev/rfcomm0
+  bash -c '/usr/bin/python3 /home/andy/car-data-sender/script.py --port=/dev/rfcomm0 --mock=True > /home/andy/log.txt 2>&1' &
   ```
 
 

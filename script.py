@@ -41,7 +41,12 @@ def send_to_azure():
 
         message = { 'DRIVE_ID': drive_id, 'SNAPSHOTS': snapshots }
 
-        requests.post(config.snapshot_data_url, json=message)
+        try:
+            requests.post(config.snapshot_data_url, json=message)
+        except requests.exceptions.ConnectionError:
+            pass
+        except Exception as e:
+            print(e)
 
         time.sleep(5)
 

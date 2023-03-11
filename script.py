@@ -24,8 +24,6 @@ def take_data_sample():
         item = copy.deepcopy(live_data)
         item['SEQUENCE_NUMBER'] = sequence_number
 
-        print("putting " + str(item))
-
         outbound_queue.put(item)
 
         time.sleep(1)
@@ -37,7 +35,6 @@ def send_to_azure():
         while True:
             try:
                 snapshot = outbound_queue.get_nowait()
-                print("getting " + str(snapshot))
                 snapshots.append(snapshot)
             except queue.Empty:
                 break

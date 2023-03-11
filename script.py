@@ -7,29 +7,37 @@ import time
 import uuid
 import config
 import requests
+import copy 
 
 data_points = [obd.commands.SPEED, obd.commands.RPM, obd.commands.COOLANT_TEMP, obd.commands.INTAKE_TEMP, obd.commands.FUEL_LEVEL, obd.commands.ENGINE_LOAD]
 live_data = { i.name : None for i in data_points }
 data_log = []
 outbound_queue = queue.Queue() #bound this?
 drive_id = str(uuid.uuid4())
-sequence_number = 0
 
 def take_data_sample():
+    sequence_number = 0
+
     while True:
         sequence_number += 1
-        live_data['SEQUENCE_NUMBER'] = sequence_number
+        
+        item = copy.deepcopy(live_data)
+        item['SEQUENCE_NUMBER'] = sequence_number
 
-        outbound_queue.put(live_data)
+        print("putting " + str(item))
+
+        outbound_queue.put(item)
+
         time.sleep(1)
 
 def send_to_azure():
     while True:
         snapshots = []
 
-        for i in range(20):
+        while True:
             try:
                 snapshot = outbound_queue.get_nowait()
+                print("getting " + str(snapshot))
                 snapshots.append(snapshot)
             except queue.Empty:
                 break

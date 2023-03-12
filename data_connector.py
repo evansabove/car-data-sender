@@ -1,6 +1,6 @@
 import obd_connector
 import mock_obd_connector
-import uuid
+import time
 
 class DataConnector:
     config = { 'connection_attempt_limit': 30 }
@@ -40,6 +40,9 @@ class DataConnector:
         self.configure_watches()
         self.connection.start()
         print("Connection started")
+
+        while True:
+            time.sleep(1)
 
     def stop(self):
         print("Stopping connection")

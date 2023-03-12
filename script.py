@@ -76,3 +76,5 @@ if __name__ == "__main__":
         data_connector.stop()
     except Exception as e:
         print(e)
+
+    print("Program finished")

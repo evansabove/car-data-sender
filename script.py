@@ -67,9 +67,10 @@ if __name__ == "__main__":
     data_connector = DataConnector(live_data, data_points, use_mock, args.port)
     logger_thread = Thread(target=take_data_sample, daemon=True)
     sender_thread = Thread(target=send_to_azure, daemon=True)
+    data_connector_thread = Thread(target=data_connector.start)
 
     try:
-        data_connector.start()
+        data_connector_thread.start()
         logger_thread.start()
         sender_thread.start()
     except KeyboardInterrupt:

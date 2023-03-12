@@ -38,7 +38,9 @@ class DataConnector:
 
         self.configure_watches()
         self.connection.start()
+        print("Connection started")
 
     def stop(self):
+        print("Stopping connection")
         self.connection.stop()
         self.running = False

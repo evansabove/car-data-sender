@@ -69,8 +69,8 @@ if __name__ == "__main__":
     sender_thread = Thread(target=send_to_azure, daemon=True)
 
     try:
-        data_connector.start()
-        logger_thread.start()
+        #data_connector.start()
+        #logger_thread.start()
         sender_thread.start()
     except KeyboardInterrupt:
         data_connector.stop()

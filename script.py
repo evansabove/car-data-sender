@@ -45,7 +45,8 @@ def send_to_azure():
 
         try:
             print("Trying to post data...")
-            requests.post(config.snapshot_data_url, json=message)
+            response = requests.post(config.snapshot_data_url, json=message)
+            print("Posted data, response " + str(response.status_code))
         except requests.exceptions.ConnectionError:
             print("Could not get connection.")
             pass

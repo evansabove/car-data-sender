@@ -70,8 +70,8 @@ if __name__ == "__main__":
 
     try:
         data_connector.start()
-        #logger_thread.start()
-        #sender_thread.start()
+        logger_thread.start()
+        sender_thread.start()
     except KeyboardInterrupt:
         data_connector.stop()
     except Exception as e:

@@ -20,6 +20,7 @@ class DataConnector:
 
     def configure_watches(self):
         for i in self.data_points:
+            print("Registering watch for " + str(i))
             self.connection.watch(i, callback=self.process_response)
 
         print("Watches configured")

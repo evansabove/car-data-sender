@@ -31,8 +31,6 @@ class DataConnector:
             print("Connection could not be made. Not trying any more!")
             return
 
-        drive_id = uuid.uuid4()
-
         self.live_data['TIMESTAMP'] = None
 
         self.configure_watches()

@@ -16,6 +16,7 @@ outbound_queue = queue.Queue() #bound this?
 drive_id = str(uuid.uuid4())
 
 def take_data_sample():
+    print("Taking data samples...")
     sequence_number = 0
 
     while True:
@@ -25,6 +26,7 @@ def take_data_sample():
         item['SEQUENCE_NUMBER'] = sequence_number
 
         outbound_queue.put(item)
+        print("sample taken")
 
         time.sleep(1)
 
@@ -42,8 +44,10 @@ def send_to_azure():
         message = { 'DRIVE_ID': drive_id, 'SNAPSHOTS': snapshots }
 
         try:
+            print("Trying to post data...")
             requests.post(config.snapshot_data_url, json=message)
         except requests.exceptions.ConnectionError:
+            print("Could not get connection.")
             pass
         except Exception as e:
             print(e)

@@ -14,12 +14,15 @@ class DataConnector:
         self.config['communication_port'] = port
 
     def process_response(self, response):
+        print("Processing response for " + response.command.name + ". Value " + str(response.value.magnitude))
         if not response.is_null():
             self.live_data[response.command.name] = round(response.value.magnitude, 2)
 
     def configure_watches(self):
         for i in self.data_points:
             self.connection.watch(i, callback=self.process_response)
+
+        print("Watches configured")
 
     def get_connector(self):
         return mock_obd_connector.connect if self.use_mock else obd_connector.connect

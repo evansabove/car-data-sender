@@ -21,6 +21,7 @@ def take_data_sample():
 
     while True:
         sequence_number += 1
+        print("Taking sequence number " + str(sequence_number))
         
         item = copy.deepcopy(live_data)
         item['SEQUENCE_NUMBER'] = sequence_number
@@ -73,3 +74,5 @@ if __name__ == "__main__":
         sender_thread.start()
     except KeyboardInterrupt:
         data_connector.stop()
+    except Exception as e:
+        print(e)

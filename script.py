@@ -12,7 +12,7 @@ import copy
 data_points = [obd.commands.SPEED, obd.commands.RPM, obd.commands.COOLANT_TEMP, obd.commands.INTAKE_TEMP, obd.commands.FUEL_LEVEL, obd.commands.ENGINE_LOAD]
 live_data = { i.name : None for i in data_points }
 data_log = []
-outbound_queue = queue.Queue() #bound this?
+outbound_queue = queue.Queue()
 drive_id = str(uuid.uuid4())
 
 def take_data_sample():
@@ -21,15 +21,19 @@ def take_data_sample():
 
     while True:
         sequence_number += 1
-        print("Taking sequence number " + str(sequence_number))
         
         item = copy.deepcopy(live_data)
         item['SEQUENCE_NUMBER'] = sequence_number
 
-        outbound_queue.put(item)
-        print("sample taken")
+        add_to_queue(item)
 
         time.sleep(1)
+
+def add_to_queue(item):
+    try:
+        outbound_queue.put_nowait(item)
+    except queue.Full:
+        print("Queue is full, discarding item")
 
 def send_to_azure():
     while True:
@@ -50,9 +54,14 @@ def send_to_azure():
             print("Posted data, response " + str(response.status_code))
         except requests.exceptions.ConnectionError:
             print("Could not get connection.")
-            pass
+
+            # Put these items back on the queue to process again
+            for snapshot in snapshots:
+                add_to_queue(snapshot)
+
         except Exception as e:
             print(e)
+            pass
 
         time.sleep(5)
 
